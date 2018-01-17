@@ -146,6 +146,7 @@ class App extends React.Component {
 #### 项目打包构建
 
 在命令行中输入 npm run build，看看打包后的代码是否符合我们的预期。
+
 ![](1.png)
 
 #### 编写一个简单的文件服务器
