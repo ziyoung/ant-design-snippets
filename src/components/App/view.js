@@ -2,21 +2,34 @@ import React from 'react'
 import PorpTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Layout } from 'antd'
+import { withRouter, Route, Redirect, Switch } from 'react-router-dom'
+import routes from '../../routes'
+import PrimaryLayout from '../../layouts/PrimaryLayout'
 
-import './App.less'
 
-const { Header, Content, Footer } = Layout
+const { Content, Footer } = Layout
+
+const loginRoute = routes.find(({ path }) => path === '/login')
 
 class App extends React.Component {
   render() {
-    const {auth, username} = this.props
+    const { auth } = this.props
     return (
       <Layout className="app">
-        <Header>ant design snippets</Header>
-        <Content className="main-content">
-          {
-            auth ? `${username}已登录` : '未登录'
-          }
+        <Content>
+          <Switch>
+            {/* 看看是不是 login 页面 */}
+            <Route exact path={loginRoute.path} render={({ history }) => {
+              // const Login = bundleHelper(loginRoute.component)
+              const Login = loginRoute.component
+              if (auth) {
+                return <Redirect to="/product" />
+              } else {
+                return <Login history={history} />
+              }
+            }} />
+            <Route path="/" render={() => auth ? <PrimaryLayout/> : <Redirect to="/login"/>}/>
+          </Switch>
         </Content>
         <Footer>Copyright © 2018</Footer>
       </Layout>
@@ -34,4 +47,4 @@ const mapStateToProps = (state) => ({
   username: state.user.username
 })
 
-export default connect(mapStateToProps)(App)
+export default withRouter(connect(mapStateToProps)(App))

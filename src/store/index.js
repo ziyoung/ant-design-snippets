@@ -13,7 +13,7 @@ if (process.env.NODE_ENV !== 'production') {
   middlewares.push(require('redux-immutable-state-invariant').default())
 }
 
-const devToolsExtension = window.devToolsExtension ? window.devToolsExtension() : () => {}
+const devToolsExtension = window.devToolsExtension ? window.devToolsExtension() : (f) => f
 
 const storeEnhancers = compose(
   applyMiddleware(...middlewares),
