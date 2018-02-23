@@ -1,9 +1,23 @@
+import React from 'react'
+import { Spin } from 'antd'
+import Loadable from 'react-loadable'
 // 路由表
-import LogIn from '../components/Login'
-import Product from '../components/Product'
-import ProductDetail from '../components/ProductDetail'
-
-// todo: 异步组件的拆分
+const Loading = () => <Spin />
+// import LogIn from 
+const LogIn = Loadable({
+  loader: () => import('../components/Login'),
+  loading: Loading
+})
+// import Product from '../components/Product'
+const Product = Loadable({
+  loader: () => import('../components/Product'),
+  loading: Loading
+})
+// import ProductDetail from '../components/ProductDetail'
+const ProductDetail = Loadable({
+  loader: () => import('../components/ProductDetail'),
+  loading: Loading
+})
 
 const routes = [
   {
