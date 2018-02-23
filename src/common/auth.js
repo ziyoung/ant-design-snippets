@@ -17,7 +17,7 @@ export default {
       return
     }
     localStorage.setItem(tokenName, token)
-    localStorage.getItem(userInfoName, username)
+    localStorage.setItem(userInfoName, username)
   },
   logOut () {
     localStorage.removeItem(tokenName)

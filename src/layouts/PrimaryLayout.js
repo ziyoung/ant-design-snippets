@@ -1,7 +1,13 @@
 import React from 'react'
-import { Layout, Menu, Icon } from 'antd'
-import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { Layout, Menu, Icon, Button } from 'antd'
+import { Route, Switch, withRouter, Redirect, NavLink } from 'react-router-dom'
+import { actions as userActions } from '../components/App'
+
 import routes from '../routes'
+
+import './PrimaryLayout.less'
 
 const { Sider, Content, Header } = Layout
 const { SubMenu } = Menu
@@ -28,26 +34,74 @@ routes.filter(({ path }) => path !== '/login').forEach(({ path, component, child
 })
 
 class PrimaryLayout extends React.Component {
+  state = {
+    openKeys: [],
+    selectedKeys: []
+  }
+  handleOpenChange = (keys) => {
+    let openKeys = []
+    if (keys.length) {
+      openKeys = keys.slice(-1)
+    }
+    this.setState({ openKeys })
+  }
+  setHighLightKeys = (props) => {
+    const { pathname } = props.location
+    let selectedKey = ''
+    let openKey = ''
+    if (pathname) {
+      openKey = pathname.substr(1).split('/')[0]
+      selectedKey = pathname.substr(1).replace('/', '.')
+      // 对于类似 '/product/' 路由作特殊处理
+      if (selectedKey.substr(-1) === '.') {
+        selectedKey = selectedKey.substring(0, selectedKey.length - 1)
+      }
+    }
+    this.setState({
+      openKeys: [openKey],
+      selectedKeys: [selectedKey]
+    })
+  }
+
+  componentDidMount() {
+    this.setHighLightKeys(this.props)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setHighLightKeys(nextProps)
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const { match, location, history } = this.props
+    if (!(match === nextProps.match && location === nextProps.location && history === nextProps.history)) {
+      return true
+    }
+    return nextState !== this.state
+
+  }
 
   render() {
+    const { openKeys, selectedKeys } = this.state
+    const { username, userLogout } = this.props
     return (
       <Layout>
-        <Header>
-          <div className="logo"></div>
+        <Header className="layout-header">
+          <h2 className="logo">欢迎你, {username}</h2>
+          <Button className="logout-btn" onClick={userLogout}>退出</Button>
         </Header>
         <Layout>
           <Sider width={200}>
             <Menu
               mode="inline"
-              defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
+              openKeys={openKeys}
+              selectedKeys={selectedKeys}
+              onOpenChange={this.handleOpenChange}
               style={{ height: '100%', borderRight: 0 }}
             >
-              <SubMenu key="sub1" title={<span><Icon type="user" />subnav 1</span>}>
-                <Menu.Item key="1">option1</Menu.Item>
-                <Menu.Item key="2">option2</Menu.Item>
-                <Menu.Item key="3">option3</Menu.Item>
-                <Menu.Item key="4">option4</Menu.Item>
+              <SubMenu key="product" title={<span><Icon type="user" />商品管理</span>}>
+                <Menu.Item key="product">
+                  <NavLink to="/product">商品列表</NavLink>
+                </Menu.Item>
               </SubMenu>
               <SubMenu key="sub2" title={<span><Icon type="laptop" />subnav 2</span>}>
                 <Menu.Item key="5">option5</Menu.Item>
@@ -63,7 +117,7 @@ class PrimaryLayout extends React.Component {
               </SubMenu>
             </Menu>
           </Sider>
-          <Content style={{ padding: '0 24px', minHeight: 280 }}>
+          <Content style={{ margin: 24, minHeight: 280, backgroundColor: "white" }}>
             <Switch>
               {
                 primaryRoutes.map(({ path, component }) =>
@@ -78,4 +132,24 @@ class PrimaryLayout extends React.Component {
   }
 }
 
-export default PrimaryLayout
+PrimaryLayout.propTypes = {
+  location: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
+  userLogout: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired
+}
+
+const mapStateToProps = (state) => ({
+  username: state.user.username
+})
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    userLogout() {
+      dispatch(userActions.userLogout())
+    }
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PrimaryLayout))

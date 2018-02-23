@@ -38,13 +38,11 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  username: PorpTypes.string,
   auth: PorpTypes.bool.isRequired
 }
 
 const mapStateToProps = (state) => ({
-  auth: state.user.token !== '',
-  username: state.user.username
+  auth: state.user.token !== ''
 })
 
 export default withRouter(connect(mapStateToProps)(App))

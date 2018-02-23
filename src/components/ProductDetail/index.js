@@ -3,14 +3,17 @@ import PropTypes from 'prop-types'
 
 class ProductDetail extends React.Component {
   state = {
-    product: {
-      id: ''
-    }
+    product: {}
   }
 
   componentDidMount () {
     const {id} = this.props.match.params
     console.log(`id is ${id}`)
+    this.setState({
+      product: {
+        id
+      }
+    })
   }
 
   render () {

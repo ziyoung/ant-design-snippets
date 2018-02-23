@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 import { Spin, Table } from 'antd'
 
 class ProductList extends React.Component {
@@ -37,6 +38,11 @@ class ProductList extends React.Component {
           <h2>商品名称是{row.name}</h2>
           <p>价格是{row.price}</p>
         </div>
+      },
+      {
+        title: '操作',
+        key: 'operate',
+        render: (value, row, index) => <NavLink to={'/product/' + row.id}>查看详情</NavLink>
       }
     ]
     const {productList} = this.state
