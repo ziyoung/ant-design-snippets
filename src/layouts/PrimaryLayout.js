@@ -72,8 +72,9 @@ class PrimaryLayout extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { match, location, history } = this.props
-    if (!(match === nextProps.match && location === nextProps.location && history === nextProps.history)) {
+    const { match, location } = this.props
+    // history 是变化的，这里只判断 match 与 location。参考链接: https://reacttraining.com/react-router/web/api/history/history-is-mutable
+    if (!(match === nextProps.match && location === nextProps.location)) {
       return true
     }
     return nextState !== this.state
