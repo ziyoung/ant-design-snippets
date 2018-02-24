@@ -5,7 +5,7 @@ import Loadable from 'react-loadable'
 const Loading = () => <Spin />
 // import LogIn from 
 const LogIn = Loadable({
-  loader: () => import('../components/Login'),
+  loader: () => import(/* webpackChunkName: "Login" */'../components/Login'),
   loading: Loading
 })
 // import Product from '../components/Product'
