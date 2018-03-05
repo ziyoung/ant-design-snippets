@@ -9,12 +9,12 @@ const instance = axios.create({
   baseURL: '/api'
 })
 // 有token的话就放在请求的头部
-if (store.getState().token) {
-  instance.defaults.headers.common['token'] = store.getState().token
+if (store.getState().user.token) {
+  instance.defaults.headers.common['token'] = store.getState().user.token
 }
 // 当 store 发送变化时去更新token值
 store.subscribe(() => {
-  instance.defaults.headers.common['token'] = store.getState().token
+  instance.defaults.headers.common['token'] = store.getState().user.token
 })
 // 根据后端的返回值不同需要作出些调整
 instance.interceptors.response.use(res => {
@@ -25,7 +25,7 @@ instance.interceptors.response.use(res => {
     console.warn('token 非法\n跳转到登录')
     // 准备跳转到登录
     setTimeout(() => {
-      store.dispatch(actions.userLogOut())
+      store.dispatch(actions.userLogout())
     }, 500)
     if (data.message) {
       message.error(data.message)
