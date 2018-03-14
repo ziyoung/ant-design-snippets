@@ -19,6 +19,11 @@ const ProductDetail = Loadable({
   loading: Loading
 })
 
+const CustomeredInput = Loadable({
+  loader: () => import('../components/CustomizedInput'),
+  loading: Loading
+})
+
 const routes = [
   {
     path: '/login',
@@ -36,6 +41,10 @@ const routes = [
         component: ProductDetail
       }
     ]
+  },
+  {
+    path: '/input',
+    component: CustomeredInput
   }
 ]
 

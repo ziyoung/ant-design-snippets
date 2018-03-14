@@ -104,6 +104,11 @@ class PrimaryLayout extends React.Component {
                   <NavLink to="/product">商品列表</NavLink>
                 </Menu.Item>
               </SubMenu>
+              <SubMenu key="input" title={<span><Icon type="user" />自定义输入组件</span>}>
+                <Menu.Item key="input">
+                  <NavLink to="/input">自定义输入组件</NavLink>
+                </Menu.Item>
+              </SubMenu>
               <SubMenu key="sub2" title={<span><Icon type="laptop" />subnav 2</span>}>
                 <Menu.Item key="5">option5</Menu.Item>
                 <Menu.Item key="6">option6</Menu.Item>
